@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
 import LogoutButton from "./logout-button";
+import ShiftPanel from "./shift-panel";
+import { fetchActiveShift } from "./shift-actions";
 
 export const metadata: Metadata = {
   title: "Dashboard — Cashier App",
@@ -24,6 +26,9 @@ export default async function DashboardPage() {
   } catch {
     user = null;
   }
+
+  // SSR: Fetch active shift data from API
+  const activeShift = await fetchActiveShift();
 
   return (
     <div className="dashboard-page">
@@ -57,12 +62,14 @@ export default async function DashboardPage() {
 
       {/* Content */}
       <main className="dashboard-content">
-        <div className="dashboard-welcome">
-          <h2>Selamat Datang{user ? `, ${user.name}` : ""}! 👋</h2>
-          <p>
-            Dashboard ini akan berisi fitur transaksi dan laporan. Dalam
-            tahap pengembangan selanjutnya.
-          </p>
+        <div className="dashboard-main">
+          <div className="dashboard-greeting">
+            <h2>Selamat Datang{user ? `, ${user.name}` : ""}! 👋</h2>
+            <p>Kelola shift dan transaksi Anda di sini.</p>
+          </div>
+
+          {/* Shift Panel — Client Component hydrated with SSR data */}
+          <ShiftPanel initialShift={activeShift} />
         </div>
       </main>
     </div>
