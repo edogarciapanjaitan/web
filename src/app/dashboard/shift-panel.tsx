@@ -79,14 +79,31 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
   const [endState, endAction, isEnding] = useActionState(endShiftAction, null);
   const elapsed = useElapsedTime(initialShift?.startTime ?? null);
 
-  // Determine if shift just changed after action
-  const shiftStarted = startState?.success === true;
-  const shiftEnded = endState?.success === true;
+  const [latestAction, setLatestAction] = useState<"START" | "END" | null>(null);
 
-  // If shift just started or ended, we show a success message briefly
-  // The page will revalidate and re-render with fresh data via revalidatePath
+  if (isStarting && latestAction !== "START") setLatestAction("START");
+  if (isEnding && latestAction !== "END") setLatestAction("END");
 
-  if (!initialShift && !shiftStarted) {
+  // Show temporary success banner while waiting for SSR revalidation to sync initialShift
+  const waitingForStartSync = latestAction === "START" && startState?.success && !initialShift;
+  const waitingForEndSync = latestAction === "END" && endState?.success && initialShift;
+
+  if (waitingForStartSync || waitingForEndSync) {
+    return (
+      <div className="shift-panel">
+        <div className="shift-card">
+          <div className="success-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+            </svg>
+            <span>{waitingForStartSync ? startState?.message : endState?.message}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!initialShift) {
     // --- NO ACTIVE SHIFT: Show start shift form ---
     return (
       <div className="shift-panel">
@@ -159,7 +176,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
     );
   }
 
-  if (initialShift && !shiftEnded) {
+  if (initialShift) {
     // --- ACTIVE SHIFT: Show shift info + end form ---
     return (
       <div className="shift-panel">
@@ -261,17 +278,5 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
     );
   }
 
-  // --- Success state (just started or ended, waiting for revalidation) ---
-  return (
-    <div className="shift-panel">
-      <div className="shift-card">
-        <div className="success-banner">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
-          </svg>
-          <span>{shiftEnded ? endState?.message : startState?.message}</span>
-        </div>
-      </div>
-    </div>
-  );
+  return null;
 }
