@@ -89,6 +89,15 @@ export async function loginAction(
       maxAge: 60 * 60 * 8,
       path: "/",
     });
+    
+    // Explicitly set role cookie to help with layout auth later
+    cookieStore.set("role", data.data.user.role, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 60 * 60 * 8,
+      path: "/",
+    });
   } catch {
     return {
       success: false,
@@ -96,6 +105,13 @@ export async function loginAction(
     };
   }
 
-  // 4. Redirect to dashboard
-  redirect("/dashboard");
+  // 4. Redirect to appropriate dashboard based on role
+  const cookieStore = await cookies();
+  const role = cookieStore.get("role")?.value;
+  
+  if (role === "ADMIN") {
+    redirect("/admin");
+  } else {
+    redirect("/dashboard");
+  }
 }
