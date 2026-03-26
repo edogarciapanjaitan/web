@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 // --- Validation Schemas ---
@@ -75,7 +76,7 @@ export async function startShiftAction(
     }
 
     revalidatePath("/dashboard");
-    return { success: true, message: "Shift berhasil dimulai!" };
+    redirect("/dashboard");
   } catch {
     return { success: false, message: "Tidak bisa terhubung ke server." };
   }
@@ -119,7 +120,7 @@ export async function endShiftAction(
     }
 
     revalidatePath("/dashboard");
-    return { success: true, message: "Shift berhasil diakhiri!" };
+    redirect("/dashboard");
   } catch {
     return { success: false, message: "Tidak bisa terhubung ke server." };
   }

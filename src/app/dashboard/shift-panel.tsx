@@ -79,30 +79,6 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
   const [endState, endAction, isEnding] = useActionState(endShiftAction, null);
   const elapsed = useElapsedTime(initialShift?.startTime ?? null);
 
-  const [latestAction, setLatestAction] = useState<"START" | "END" | null>(null);
-
-  if (isStarting && latestAction !== "START") setLatestAction("START");
-  if (isEnding && latestAction !== "END") setLatestAction("END");
-
-  // Show temporary success banner while waiting for SSR revalidation to sync initialShift
-  const waitingForStartSync = latestAction === "START" && startState?.success && !initialShift;
-  const waitingForEndSync = latestAction === "END" && endState?.success && initialShift;
-
-  if (waitingForStartSync || waitingForEndSync) {
-    return (
-      <div className="shift-panel">
-        <div className="shift-card">
-          <div className="success-banner">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
-            </svg>
-            <span>{waitingForStartSync ? startState?.message : endState?.message}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (!initialShift) {
     // --- NO ACTIVE SHIFT: Show start shift form ---
     return (
@@ -176,107 +152,103 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
     );
   }
 
-  if (initialShift) {
-    // --- ACTIVE SHIFT: Show shift info + end form ---
-    return (
-      <div className="shift-panel">
-        <div className="shift-status-badge shift-status-active">
-          <span className="status-dot status-dot-active" />
-          Shift Aktif
-        </div>
+  // --- ACTIVE SHIFT: Show shift info + end form ---
+  return (
+    <div className="shift-panel">
+      <div className="shift-status-badge shift-status-active">
+        <span className="status-dot status-dot-active" />
+        Shift Aktif
+      </div>
 
-        {/* Shift Info Card */}
-        <div className="shift-card shift-card-active">
-          <div className="shift-info-grid">
-            <div className="shift-info-item">
-              <span className="shift-info-label">Mulai</span>
-              <span className="shift-info-value">{formatTime(initialShift.startTime)}</span>
-              <span className="shift-info-sub">{formatDate(initialShift.startTime)}</span>
-            </div>
-            <div className="shift-info-item">
-              <span className="shift-info-label">Durasi</span>
-              <span className="shift-info-value shift-timer">{elapsed || "00:00:00"}</span>
-              <span className="shift-info-sub">Berjalan</span>
-            </div>
-            <div className="shift-info-item">
-              <span className="shift-info-label">Uang Awal</span>
-              <span className="shift-info-value">{formatCurrency(initialShift.startingCash)}</span>
-            </div>
-            <div className="shift-info-item">
-              <span className="shift-info-label">Penjualan Tunai</span>
-              <span className="shift-info-value">{formatCurrency(initialShift.totalCashSales)}</span>
-            </div>
-            <div className="shift-info-item">
-              <span className="shift-info-label">Penjualan Debit</span>
-              <span className="shift-info-value">{formatCurrency(initialShift.totalDebitSales)}</span>
-            </div>
+      {/* Shift Info Card */}
+      <div className="shift-card shift-card-active">
+        <div className="shift-info-grid">
+          <div className="shift-info-item">
+            <span className="shift-info-label">Mulai</span>
+            <span className="shift-info-value">{formatTime(initialShift.startTime)}</span>
+            <span className="shift-info-sub">{formatDate(initialShift.startTime)}</span>
           </div>
-        </div>
-
-        {/* End Shift Card */}
-        <div className="shift-card">
-          <div className="shift-card-header">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 6h12v12H6z" fill="currentColor"/>
-            </svg>
-            <h3>Akhiri Shift</h3>
+          <div className="shift-info-item">
+            <span className="shift-info-label">Durasi</span>
+            <span className="shift-info-value shift-timer">{elapsed || "00:00:00"}</span>
+            <span className="shift-info-sub">Berjalan</span>
           </div>
-          <p className="shift-card-desc">
-            Hitung uang di mesin kasir dan masukkan jumlah akhir untuk menutup shift.
-          </p>
-
-          {/* Error banner */}
-          {endState && !endState.success && (
-            <div className="error-banner">
-              <span>{endState.message}</span>
-            </div>
-          )}
-
-          <form action={endAction} className="shift-form">
-            <div className="form-group">
-              <label htmlFor="endingCash" className="form-label">
-                Uang Akhir (Rp)
-              </label>
-              <div className="input-wrapper">
-                <span className="input-prefix">Rp</span>
-                <input
-                  id="endingCash"
-                  name="endingCash"
-                  type="number"
-                  min="0"
-                  max="100000000"
-                  step="1000"
-                  required
-                  className="form-input form-input-prefixed"
-                  placeholder="750000"
-                  disabled={isEnding}
-                />
-              </div>
-              {endState?.errors?.endingCash && (
-                <p className="field-error">{endState.errors.endingCash[0]}</p>
-              )}
-            </div>
-
-            <button type="submit" className="submit-button shift-end-btn" disabled={isEnding}>
-              {isEnding ? (
-                <span className="loading-wrapper">
-                  <span className="spinner" />
-                  <span>Memproses...</span>
-                </span>
-              ) : (
-                <>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 6h12v12H6z" fill="currentColor"/>
-                  </svg>
-                  Akhiri Shift
-                </>
-              )}
-            </button>
-          </form>
+          <div className="shift-info-item">
+            <span className="shift-info-label">Uang Awal</span>
+            <span className="shift-info-value">{formatCurrency(initialShift.startingCash)}</span>
+          </div>
+          <div className="shift-info-item">
+            <span className="shift-info-label">Penjualan Tunai</span>
+            <span className="shift-info-value">{formatCurrency(initialShift.totalCashSales)}</span>
+          </div>
+          <div className="shift-info-item">
+            <span className="shift-info-label">Penjualan Debit</span>
+            <span className="shift-info-value">{formatCurrency(initialShift.totalDebitSales)}</span>
+          </div>
         </div>
       </div>
-    );
-  }
 
-  return null;
+      {/* End Shift Card */}
+      <div className="shift-card">
+        <div className="shift-card-header">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 6h12v12H6z" fill="currentColor"/>
+          </svg>
+          <h3>Akhiri Shift</h3>
+        </div>
+        <p className="shift-card-desc">
+          Hitung uang di mesin kasir dan masukkan jumlah akhir untuk menutup shift.
+        </p>
+
+        {/* Error banner */}
+        {endState && !endState.success && (
+          <div className="error-banner">
+            <span>{endState.message}</span>
+          </div>
+        )}
+
+        <form action={endAction} className="shift-form">
+          <div className="form-group">
+            <label htmlFor="endingCash" className="form-label">
+              Uang Akhir (Rp)
+            </label>
+            <div className="input-wrapper">
+              <span className="input-prefix">Rp</span>
+              <input
+                id="endingCash"
+                name="endingCash"
+                type="number"
+                min="0"
+                max="100000000"
+                step="1000"
+                required
+                className="form-input form-input-prefixed"
+                placeholder="750000"
+                disabled={isEnding}
+              />
+            </div>
+            {endState?.errors?.endingCash && (
+              <p className="field-error">{endState.errors.endingCash[0]}</p>
+            )}
+          </div>
+
+          <button type="submit" className="submit-button shift-end-btn" disabled={isEnding}>
+            {isEnding ? (
+              <span className="loading-wrapper">
+                <span className="spinner" />
+                <span>Memproses...</span>
+              </span>
+            ) : (
+              <>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6 6h12v12H6z" fill="currentColor"/>
+                </svg>
+                Akhiri Shift
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

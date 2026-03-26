@@ -22,9 +22,11 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Authenticated user trying to access login page → redirect to dashboard
+  // Authenticated user trying to access login page → redirect to appropriate dashboard
   if (token && isPublicPath) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    const role = request.cookies.get("role")?.value;
+    const destination = role === "ADMIN" ? "/admin" : "/dashboard";
+    return NextResponse.redirect(new URL(destination, request.url));
   }
 
   return NextResponse.next();

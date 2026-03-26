@@ -7,5 +7,6 @@ export async function logoutAction() {
   const cookieStore = await cookies();
   cookieStore.delete("auth-token");
   cookieStore.delete("user-info");
+  cookieStore.delete("role");
   redirect("/login");
 }
