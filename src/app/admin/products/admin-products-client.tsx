@@ -68,7 +68,7 @@ export default function AdminProductsClient({ initialData, initialMeta, initialS
   };
 
   const handleDelete = async (id: string, name: string) => {
-    if (confirm(`Apakah Anda yakin ingin menghapus produk "${name}"?\n(Produk yang sudah ada dalam riwayat transaksi tidak dapat dihapus)`)) {
+    if (confirm(`Apakah Anda yakin ingin menghapus produk "${name}"?`)) {
       const res = await deleteProductAction(id);
       if (!res.success) {
         alert(res.message);

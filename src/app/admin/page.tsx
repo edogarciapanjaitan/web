@@ -1,9 +1,16 @@
-import { getDashboardStatsAction } from "./dashboard-actions";
+import { getDashboardStatsAction, getDailyShiftReportAction } from "./dashboard-actions";
 import DashboardChart from "./dashboard-chart";
+import ShiftReportTable from "./shift-report-table";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function AdminPage() {
   const statsRes = await getDashboardStatsAction(7);
   const dashboardStats = statsRes.success ? statsRes.data : [];
+
+  const shiftRes = await getDailyShiftReportAction(7);
+  const shiftReports = shiftRes.success ? shiftRes.data : [];
 
   return (
     <div style={{ animation: "fadeInUp 0.5s ease-out" }}>
@@ -28,6 +35,12 @@ export default async function AdminPage() {
           </svg>
           <p style={{ margin: 0, fontSize: "0.9375rem" }}>Belum ada data penjualan untuk ditampilkan.</p>
           <p style={{ margin: "0.5rem 0 0", fontSize: "0.8125rem", opacity: 0.7 }}>Data akan muncul setelah transaksi pertama diproses.</p>
+        </div>
+      )}
+
+      {shiftReports.length > 0 && (
+        <div style={{ marginTop: "2rem" }}>
+          <ShiftReportTable reports={shiftReports} />
         </div>
       )}
     </div>
