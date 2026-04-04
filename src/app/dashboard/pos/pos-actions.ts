@@ -96,6 +96,17 @@ export async function createTransactionAction(payload: {
     };
   }
 
+  // Validate debit card number
+  if (payload.paymentMethod === "DEBIT") {
+    const digits = (payload.debitCardNo || "").replace(/\D/g, "");
+    if (digits.length !== 16) {
+      return {
+        success: false,
+        message: "Nomor kartu debit harus 16 digit",
+      };
+    }
+  }
+
   try {
     const response = await fetch("http://localhost:3001/api/transactions", {
       method: "POST",

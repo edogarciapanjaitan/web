@@ -58,11 +58,20 @@ export async function getAdminWorkers(page: number = 1, search: string = "") {
 
 export async function createWorkerAction(formData: FormData): Promise<ActionResponse> {
   try {
+    const name = (formData.get("name") as string)?.trim();
+    const username = (formData.get("username") as string)?.trim();
+    const password = formData.get("password") as string;
+    const role = (formData.get("role") as string) || "CASHIER";
+
+    if (!username) return { success: false, message: "Username harus diisi" };
+    if (!role) return { success: false, message: "Peran harus dipilih" };
+    if (!password || password.length < 6) return { success: false, message: "Password harus diisi (minimal 6 karakter)" };
+
     const data = {
-      name: formData.get("name"),
-      username: formData.get("username"),
-      password: formData.get("password"),
-      role: formData.get("role") || "CASHIER",
+      name,
+      username,
+      password,
+      role,
     };
 
     const headers = await getAuthHeader();
@@ -87,11 +96,19 @@ export async function createWorkerAction(formData: FormData): Promise<ActionResp
 
 export async function updateWorkerAction(id: string, formData: FormData): Promise<ActionResponse> {
   try {
+    const name = (formData.get("name") as string)?.trim();
+    const username = (formData.get("username") as string)?.trim();
+    const role = (formData.get("role") as string) || "CASHIER";
+    const password = formData.get("password") as string || "";
+
+    if (!username) return { success: false, message: "Username harus diisi" };
+    if (!role) return { success: false, message: "Peran harus dipilih" };
+
     const data = {
-      name: formData.get("name"),
-      username: formData.get("username"),
-      role: formData.get("role") || "CASHIER",
-      password: formData.get("password") || "", // Optional
+      name,
+      username,
+      role,
+      password,
     };
 
     const headers = await getAuthHeader();

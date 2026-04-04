@@ -62,11 +62,21 @@ export async function getAdminProducts(page: number = 1, search: string = "") {
 
 export async function createProductAction(formData: FormData): Promise<ActionResponse> {
   try {
+    const name = (formData.get("name") as string)?.trim();
+    const sku = (formData.get("sku") as string)?.trim();
+    const price = Number(formData.get("price"));
+    const stock = Number(formData.get("stock"));
+
+    if (!name) return { success: false, message: "Nama produk harus diisi" };
+    if (!sku) return { success: false, message: "SKU harus diisi" };
+    if (isNaN(price) || price <= 0) return { success: false, message: "Harga harus lebih dari 0" };
+    if (isNaN(stock) || stock <= 0) return { success: false, message: "Stok awal harus lebih dari 0" };
+
     const data = {
-      name: formData.get("name"),
-      sku: formData.get("sku"),
-      price: Number(formData.get("price")),
-      stock: Number(formData.get("stock")),
+      name,
+      sku,
+      price,
+      stock,
       category: formData.get("category") || null,
     };
 
@@ -92,11 +102,21 @@ export async function createProductAction(formData: FormData): Promise<ActionRes
 
 export async function updateProductAction(id: string, formData: FormData): Promise<ActionResponse> {
   try {
+    const name = (formData.get("name") as string)?.trim();
+    const sku = (formData.get("sku") as string)?.trim();
+    const price = Number(formData.get("price"));
+    const stock = Number(formData.get("stock"));
+
+    if (!name) return { success: false, message: "Nama produk harus diisi" };
+    if (!sku) return { success: false, message: "SKU harus diisi" };
+    if (isNaN(price) || price <= 0) return { success: false, message: "Harga harus lebih dari 0" };
+    if (isNaN(stock) || stock <= 0) return { success: false, message: "Stok awal harus lebih dari 0" };
+
     const data = {
-      name: formData.get("name"),
-      sku: formData.get("sku"),
-      price: Number(formData.get("price")),
-      stock: Number(formData.get("stock")),
+      name,
+      sku,
+      price,
+      stock,
       category: formData.get("category") || null,
     };
 

@@ -1,11 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useTransition } from "react";
 import type { ShiftReport } from "./dashboard-actions";
 
 interface ShiftReportTableProps {
   reports: ShiftReport[];
+  initialSearch: string;
+  initialFilter: string;
+  initialPage: number;
 }
+
+const ITEMS_PER_PAGE = 5;
 
 type FilterType = "all" | "discrepancy";
 
@@ -61,9 +67,66 @@ function getDiscrepancyInfo(report: ShiftReport) {
   };
 }
 
-export default function ShiftReportTable({ reports }: ShiftReportTableProps) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<FilterType>("all");
+export default function ShiftReportTable({ reports, initialSearch, initialFilter, initialPage }: ShiftReportTableProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [, startTransition] = useTransition();
+
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
+  const filter = (initialFilter === "discrepancy" ? "discrepancy" : "all") as FilterType;
+  const currentPage = Math.max(1, initialPage || 1);
+
+  // Check if any filter is active
+  const hasActiveFilter = searchTerm !== "" || filter !== "all";
+
+  const updateURL = (newSearch: string, newFilter: string, newPage?: number) => {
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (newSearch) {
+        params.set("shiftSearch", newSearch);
+      } else {
+        params.delete("shiftSearch");
+      }
+      if (newFilter !== "all") {
+        params.set("shiftFilter", newFilter);
+      } else {
+        params.delete("shiftFilter");
+      }
+      if (newPage && newPage > 1) {
+        params.set("shiftPage", newPage.toString());
+      } else {
+        params.delete("shiftPage");
+      }
+      router.push(`/admin?${params.toString()}`);
+    });
+  };
+
+  const setFilter = (newFilter: FilterType) => {
+    updateURL(searchTerm, newFilter, 1);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    clearTimeout((globalThis as any).__shiftSearchTimer);
+    (globalThis as any).__shiftSearchTimer = setTimeout(() => {
+      updateURL(value, filter, 1);
+    }, 500);
+  };
+
+  const handleReset = () => {
+    setSearchTerm("");
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.delete("shiftSearch");
+      params.delete("shiftFilter");
+      params.delete("shiftPage");
+      router.push(`/admin?${params.toString()}`);
+    });
+  };
+
+  const handlePageChange = (newPage: number) => {
+    updateURL(searchTerm, filter, newPage);
+  };
 
   // Count discrepancies for badge
   const discrepancyCount = reports.filter((r) => {
@@ -85,6 +148,14 @@ export default function ShiftReportTable({ reports }: ShiftReportTableProps) {
 
     return matchesSearch;
   });
+
+  // Pagination
+  const totalPages = Math.ceil(filteredReports.length / ITEMS_PER_PAGE);
+  const safePage = Math.min(currentPage, Math.max(1, totalPages));
+  const paginatedReports = filteredReports.slice(
+    (safePage - 1) * ITEMS_PER_PAGE,
+    safePage * ITEMS_PER_PAGE
+  );
 
   return (
     <div
@@ -205,10 +276,37 @@ export default function ShiftReportTable({ reports }: ShiftReportTableProps) {
               className="form-input"
               placeholder="Cari kasir atau tanggal..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               style={{ paddingLeft: "36px", width: "100%", fontSize: "0.875rem" }}
             />
           </div>
+
+          {/* Reset Button */}
+          {hasActiveFilter && (
+            <button
+              onClick={handleReset}
+              style={{
+                padding: "0.4rem 0.75rem",
+                borderRadius: "0.5rem",
+                fontSize: "0.8125rem",
+                fontWeight: 500,
+                border: "1px solid rgba(239, 68, 68, 0.3)",
+                background: "rgba(239, 68, 68, 0.1)",
+                color: "#fca5a5",
+                cursor: "pointer",
+                transition: "all 0.2s",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.375rem",
+                whiteSpace: "nowrap",
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+              Reset Filter
+            </button>
+          )}
         </div>
       </div>
 
@@ -237,7 +335,7 @@ export default function ShiftReportTable({ reports }: ShiftReportTableProps) {
               </tr>
             </thead>
             <tbody>
-              {filteredReports.map((report) => {
+              {paginatedReports.map((report) => {
                 const info = getDiscrepancyInfo(report);
 
                 return (
@@ -434,6 +532,85 @@ export default function ShiftReportTable({ reports }: ShiftReportTableProps) {
           </table>
         )}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: "1.25rem",
+            paddingTop: "1rem",
+            borderTop: "1px solid var(--border)",
+          }}
+        >
+          <span style={{ fontSize: "0.8125rem", color: "var(--text-secondary)" }}>
+            Menampilkan {(safePage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(safePage * ITEMS_PER_PAGE, filteredReports.length)} dari {filteredReports.length} shift
+          </span>
+
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            <button
+              disabled={safePage <= 1}
+              onClick={() => handlePageChange(safePage - 1)}
+              style={{
+                padding: "0.4rem 0.75rem",
+                background: "var(--bg-body)",
+                border: "1px solid var(--border)",
+                color: "var(--text-primary)",
+                borderRadius: "0.375rem",
+                cursor: safePage <= 1 ? "not-allowed" : "pointer",
+                opacity: safePage <= 1 ? 0.5 : 1,
+                fontSize: "0.8125rem",
+                fontWeight: 500,
+                transition: "all 0.2s",
+              }}
+            >
+              ← Sebelumnya
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => handlePageChange(page)}
+                style={{
+                  padding: "0.4rem 0.65rem",
+                  borderRadius: "0.375rem",
+                  fontSize: "0.8125rem",
+                  fontWeight: 600,
+                  border: page === safePage ? "1px solid var(--primary)" : "1px solid var(--border)",
+                  background: page === safePage ? "rgba(99, 102, 241, 0.15)" : "var(--bg-body)",
+                  color: page === safePage ? "#818cf8" : "var(--text-secondary)",
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                  minWidth: "32px",
+                }}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              disabled={safePage >= totalPages}
+              onClick={() => handlePageChange(safePage + 1)}
+              style={{
+                padding: "0.4rem 0.75rem",
+                background: "var(--bg-body)",
+                border: "1px solid var(--border)",
+                color: "var(--text-primary)",
+                borderRadius: "0.375rem",
+                cursor: safePage >= totalPages ? "not-allowed" : "pointer",
+                opacity: safePage >= totalPages ? 0.5 : 1,
+                fontSize: "0.8125rem",
+                fontWeight: 500,
+                transition: "all 0.2s",
+              }}
+            >
+              Selanjutnya →
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

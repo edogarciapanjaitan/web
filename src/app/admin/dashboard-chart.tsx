@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import {
   LineChart,
   Line,
@@ -15,12 +16,29 @@ import type { DashboardStat } from "./dashboard-actions";
 
 interface DashboardChartProps {
   data: DashboardStat[];
+  initialChartType: string;
 }
 
 type ChartType = "transactions" | "items";
 
-export default function DashboardChart({ data }: DashboardChartProps) {
-  const [chartType, setChartType] = useState<ChartType>("transactions");
+export default function DashboardChart({ data, initialChartType }: DashboardChartProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [, startTransition] = useTransition();
+
+  const chartType = (initialChartType === "items" ? "items" : "transactions") as ChartType;
+
+  const setChartType = (type: ChartType) => {
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (type === "transactions") {
+        params.delete("chart");
+      } else {
+        params.set("chart", type);
+      }
+      router.push(`/admin?${params.toString()}`);
+    });
+  };
 
   // Format date correctly for display (e.g., '14 Mar' from '2026-03-14')
   const formattedData = data.map((item) => {
@@ -71,6 +89,7 @@ export default function DashboardChart({ data }: DashboardChartProps) {
               borderRadius: "0.375rem",
               fontSize: "0.875rem",
               fontWeight: 500,
+              border: "none",
               background: chartType === "transactions" ? "var(--bg-card)" : "transparent",
               color: chartType === "transactions" ? "var(--text-primary)" : "var(--text-secondary)",
               boxShadow: chartType === "transactions" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
@@ -87,6 +106,7 @@ export default function DashboardChart({ data }: DashboardChartProps) {
               borderRadius: "0.375rem",
               fontSize: "0.875rem",
               fontWeight: 500,
+              border: "none",
               background: chartType === "items" ? "var(--bg-card)" : "transparent",
               color: chartType === "items" ? "var(--text-primary)" : "var(--text-secondary)",
               boxShadow: chartType === "items" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",

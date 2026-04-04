@@ -43,6 +43,7 @@ export default function PaymentDialog({
   const [method, setMethod] = useState<"CASH" | "DEBIT">("CASH");
   const [amountPaid, setAmountPaid] = useState<string>("");
   const [debitCardNo, setDebitCardNo] = useState("");
+  const [debitError, setDebitError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [receipt, setReceipt] = useState<TransactionResult | null>(null);
@@ -50,8 +51,17 @@ export default function PaymentDialog({
   const amountPaidNum = Number(amountPaid) || 0;
   const change = amountPaidNum - totalPrice;
 
+  const digitsOnly = debitCardNo.replace(/\D/g, "");
+
   async function handleSubmit() {
     setError(null);
+    setDebitError(null);
+
+    if (method === "DEBIT" && digitsOnly.length !== 16) {
+      setDebitError("Nomor kartu debit harus 16 digit");
+      return;
+    }
+
     setIsProcessing(true);
 
     const result = await createTransactionAction({
@@ -238,7 +248,7 @@ export default function PaymentDialog({
               <label htmlFor="debitCardNo" className="form-label">
                 Nomor Kartu Debit
               </label>
-              <div className="input-wrapper">
+              <div className="input-wrapper" style={{ position: "relative" }}>
                 <svg className="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" fill="currentColor"/>
                 </svg>
@@ -246,13 +256,34 @@ export default function PaymentDialog({
                   id="debitCardNo"
                   type="text"
                   className="form-input"
-                  placeholder="Masukkan nomor kartu"
+                  placeholder="Masukkan 16 digit nomor kartu"
                   value={debitCardNo}
-                  onChange={(e) => setDebitCardNo(e.target.value)}
-                  maxLength={20}
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, "");
+                    if (val.length <= 16) {
+                      setDebitCardNo(val);
+                      setDebitError(null);
+                    }
+                  }}
+                  maxLength={16}
+                  inputMode="numeric"
                   autoFocus
                   disabled={isProcessing}
+                  style={debitError ? { borderColor: "#ef4444", boxShadow: "0 0 0 2px rgba(239, 68, 68, 0.15)" } : {}}
                 />
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "0.35rem" }}>
+                {debitError ? (
+                  <div style={{ color: "#ef4444", fontSize: "0.8rem", display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {debitError}
+                  </div>
+                ) : <span />}
+                <span style={{ fontSize: "0.75rem", color: digitsOnly.length === 16 ? "#10b981" : "var(--text-muted)", fontFamily: "monospace", fontWeight: 500 }}>
+                  {digitsOnly.length}/16 digit
+                </span>
               </div>
             </div>
           </div>
@@ -273,7 +304,7 @@ export default function PaymentDialog({
           disabled={
             isProcessing ||
             (method === "CASH" && change < 0) ||
-            (method === "DEBIT" && debitCardNo.trim().length < 4)
+            (method === "DEBIT" && digitsOnly.length !== 16)
           }
         >
           {isProcessing ? (

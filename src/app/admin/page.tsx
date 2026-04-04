@@ -5,7 +5,19 @@ import ShiftReportTable from "./shift-report-table";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const sParams = await searchParams;
+
+  // Read URL params for child components
+  const chartType = typeof sParams.chart === "string" ? sParams.chart : "transactions";
+  const shiftSearch = typeof sParams.shiftSearch === "string" ? sParams.shiftSearch : "";
+  const shiftFilter = typeof sParams.shiftFilter === "string" ? sParams.shiftFilter : "all";
+  const shiftPage = typeof sParams.shiftPage === "string" ? parseInt(sParams.shiftPage) : 1;
+
   const statsRes = await getDashboardStatsAction(7);
   const dashboardStats = statsRes.success ? statsRes.data : [];
 
@@ -20,7 +32,7 @@ export default async function AdminPage() {
       </div>
 
       {dashboardStats.length > 0 ? (
-        <DashboardChart data={dashboardStats} />
+        <DashboardChart data={dashboardStats} initialChartType={chartType} />
       ) : (
         <div style={{
           padding: "2.5rem",
@@ -40,7 +52,7 @@ export default async function AdminPage() {
 
       {shiftReports.length > 0 && (
         <div style={{ marginTop: "2rem" }}>
-          <ShiftReportTable reports={shiftReports} />
+          <ShiftReportTable reports={shiftReports} initialSearch={shiftSearch} initialFilter={shiftFilter} initialPage={shiftPage} />
         </div>
       )}
     </div>

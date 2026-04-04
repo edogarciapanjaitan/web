@@ -77,6 +77,13 @@ export default function AdminWorkersClient({ initialData, initialMeta, initialSe
     setSelectedWorker(null);
   };
 
+  const handleReset = () => {
+    setSearchTerm("");
+    startTransition(() => {
+      router.push("/admin/workers");
+    });
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Toolbar */}
@@ -96,12 +103,39 @@ export default function AdminWorkersClient({ initialData, initialMeta, initialSe
           {isPending && <span style={{ marginLeft: '10px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Memuat...</span>}
         </div>
 
-        <button onClick={handleAdd} className="submit-button" style={{ width: 'auto', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer' }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
-          </svg>
-          Tambah Pengguna
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {searchTerm && (
+            <button
+              onClick={handleReset}
+              style={{
+                padding: '0.5rem 0.9rem',
+                borderRadius: '8px',
+                fontSize: '0.8125rem',
+                fontWeight: 500,
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                background: 'rgba(239, 68, 68, 0.1)',
+                color: '#fca5a5',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.375rem',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+              Reset
+            </button>
+          )}
+          <button onClick={handleAdd} className="submit-button" style={{ width: 'auto', margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.6rem 1.2rem', borderRadius: '8px', cursor: 'pointer' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="currentColor"/>
+            </svg>
+            Tambah Pengguna
+          </button>
+        </div>
       </div>
 
       {/* Table */}

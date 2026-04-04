@@ -43,6 +43,15 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
     router.push(`/dashboard/history?date=${newDate}`);
   };
 
+  const today = new Date().toISOString().split("T")[0];
+  const isFiltered = date !== today;
+
+  const handleReset = () => {
+    setDate(today);
+    setSelectedTx(null);
+    router.push(`/dashboard/history?date=${today}`);
+  };
+
   const totalSales = initialData.reduce((acc, tx) => acc + tx.totalPrice, 0);
 
   return (
@@ -60,6 +69,32 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
               onChange={handleDateChange}
               className="form-input"
             />
+            {isFiltered && (
+              <button
+                onClick={handleReset}
+                style={{
+                  padding: '0.4rem 0.75rem',
+                  borderRadius: '6px',
+                  fontSize: '0.8125rem',
+                  fontWeight: 500,
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  color: '#fca5a5',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.3rem',
+                  whiteSpace: 'nowrap',
+                  marginLeft: '0.5rem',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+                Hari Ini
+              </button>
+            )}
           </div>
 
           <div className="history-summary">

@@ -90,6 +90,13 @@ export default function AdminStockClient({ initialData, initialMeta, initialSear
     });
   };
 
+  const handleReset = () => {
+    setSearchTerm("");
+    startTransition(() => {
+      router.push("/admin/stock");
+    });
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Success Notification */}
@@ -118,6 +125,32 @@ export default function AdminStockClient({ initialData, initialMeta, initialSear
           />
           {isPending && <span style={{ marginLeft: '10px', fontSize: '0.8rem', color: 'var(--text-muted)' }}>Memuat...</span>}
         </div>
+
+        {searchTerm && (
+          <button
+            onClick={handleReset}
+            style={{
+              padding: '0.5rem 0.9rem',
+              borderRadius: '8px',
+              fontSize: '0.8125rem',
+              fontWeight: 500,
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              background: 'rgba(239, 68, 68, 0.1)',
+              color: '#fca5a5',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.375rem',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+            Reset
+          </button>
+        )}
       </div>
 
       {/* Table */}
