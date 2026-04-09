@@ -330,6 +330,7 @@ export default function ShiftReportTable({ reports, initialSearch, initialFilter
                 <th style={{ textAlign: "right" }}>Debit Terekam</th>
                 <th style={{ textAlign: "right" }}>Kas Diharapkan</th>
                 <th style={{ textAlign: "right" }}>Total Akhir Laci</th>
+                <th style={{ textAlign: "right" }}>Setoran Akhir</th>
                 <th style={{ textAlign: "right" }}>Selisih</th>
                 <th style={{ textAlign: "center" }}>Status</th>
               </tr>
@@ -435,6 +436,25 @@ export default function ShiftReportTable({ reports, initialSearch, initialFilter
                     >
                       {report.endingCash !== null
                         ? formatCurrency(report.endingCash)
+                        : "-"}
+                    </td>
+
+                    {/* Setoran Akhir */}
+                    <td
+                      style={{
+                        textAlign: "right",
+                        fontWeight: 700,
+                        fontSize: "0.875rem",
+                        color:
+                          info.status === "mismatch"
+                            ? "#ef4444"
+                            : info.status === "match"
+                            ? "var(--success)"
+                            : "var(--text-secondary)",
+                      }}
+                    >
+                      {report.endingCash !== null
+                        ? formatCurrency(report.endingCash + report.totalDebitSales)
                         : "-"}
                     </td>
 

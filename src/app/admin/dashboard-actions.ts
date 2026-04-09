@@ -10,7 +10,7 @@ export interface DashboardStat {
   totalItemsSold: number;
 }
 
-export async function getDashboardStatsAction(days: number = 7) {
+export async function getDashboardStatsAction(month?: number, year?: number) {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get("auth-token")?.value;
@@ -19,7 +19,11 @@ export async function getDashboardStatsAction(days: number = 7) {
       return { success: false, data: [] };
     }
 
-    const response = await fetch(`${API_URL}/transactions/dashboard-stats?days=${days}`, {
+    const queryParams = new URLSearchParams();
+    if (month !== undefined) queryParams.set("month", month.toString());
+    if (year !== undefined) queryParams.set("year", year.toString());
+
+    const response = await fetch(`${API_URL}/transactions/dashboard-stats?${queryParams.toString()}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -42,6 +46,50 @@ export async function getDashboardStatsAction(days: number = 7) {
     };
   } catch (error) {
     console.error("Failed to fetch dashboard stats:", error);
+    return { success: false, data: [] };
+  }
+}
+
+export interface TopProductStat {
+  productId: string;
+  name: string;
+  totalQuantity: number;
+}
+
+export async function getTopProductsAction(month?: number, year?: number) {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("auth-token")?.value;
+
+    if (!token) {
+      return { success: false, data: [] };
+    }
+
+    const queryParams = new URLSearchParams();
+    if (month !== undefined) queryParams.set("month", month.toString());
+    if (year !== undefined) queryParams.set("year", year.toString());
+
+    const response = await fetch(`${API_URL}/transactions/top-products?${queryParams.toString()}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      console.error("TOP PRODUCTS API response not ok", response.status, await response.text());
+      return { success: false, data: [] };
+    }
+
+    const data = await response.json();
+    return {
+      success: true,
+      data: data.data as TopProductStat[],
+    };
+  } catch (error) {
+    console.error("Failed to fetch top products:", error);
     return { success: false, data: [] };
   }
 }

@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useState, useRef } from "react";
 import { startShiftAction, endShiftAction } from "./shift-actions";
+import { useConfirm } from "@/components/confirm-dialog";
 
 // --- Types ---
 
@@ -78,6 +79,57 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
   const [startState, startAction, isStarting] = useActionState(startShiftAction, null);
   const [endState, endAction, isEnding] = useActionState(endShiftAction, null);
   const elapsed = useElapsedTime(initialShift?.startTime ?? null);
+  const { confirm, ConfirmDialogElement } = useConfirm();
+  const startFormRef = useRef<HTMLFormElement>(null);
+  const endFormRef = useRef<HTMLFormElement>(null);
+
+  const handleStartShiftBtnClick = async () => {
+    const form = startFormRef.current;
+    if (!form) return;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+    const cash = formData.get("startingCash") as string;
+
+    const confirmed = await confirm({
+      title: "Mulai Shift?",
+      message: `Anda akan memulai shift baru dengan uang awal Rp ${Number(cash || 0).toLocaleString("id-ID")}. Lanjutkan?`,
+      confirmText: "Ya, Mulai",
+      variant: "default",
+    });
+
+    if (confirmed) {
+      form.requestSubmit();
+    }
+  };
+
+  const handleEndShiftBtnClick = async () => {
+    const form = endFormRef.current;
+    if (!form) return;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+    const cash = formData.get("endingCash") as string;
+
+    const confirmed = await confirm({
+      title: "Akhiri Shift?",
+      message: `Anda akan mengakhiri shift dengan uang akhir Rp ${Number(cash || 0).toLocaleString("id-ID")}. Shift tidak dapat dibuka kembali setelah ditutup. Lanjutkan?`,
+      confirmText: "Ya, Akhiri",
+      variant: "warning",
+    });
+
+    if (confirmed) {
+      form.requestSubmit();
+    }
+  };
 
   if (!initialShift) {
     // --- NO ACTIVE SHIFT: Show start shift form ---
@@ -106,7 +158,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
             </div>
           )}
 
-          <form action={startAction} className="shift-form">
+          <form action={startAction} ref={startFormRef} className="shift-form">
             <div className="form-group">
               <label htmlFor="startingCash" className="form-label">
                 Uang Awal (Rp)
@@ -119,7 +171,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
                   type="number"
                   min="0"
                   max="100000000"
-                  step="1000"
+                  step="1"
                   required
                   className="form-input form-input-prefixed"
                   placeholder="500000"
@@ -131,7 +183,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
               )}
             </div>
 
-            <button type="submit" className="submit-button shift-start-btn" disabled={isStarting}>
+            <button type="button" onClick={handleStartShiftBtnClick} className="submit-button shift-start-btn" disabled={isStarting}>
               {isStarting ? (
                 <span className="loading-wrapper">
                   <span className="spinner" />
@@ -148,6 +200,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
             </button>
           </form>
         </div>
+        {ConfirmDialogElement}
       </div>
     );
   }
@@ -207,7 +260,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
           </div>
         )}
 
-        <form action={endAction} className="shift-form">
+        <form action={endAction} ref={endFormRef} className="shift-form">
           <div className="form-group">
             <label htmlFor="endingCash" className="form-label">
               Uang Akhir (Rp)
@@ -220,7 +273,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
                 type="number"
                 min="0"
                 max="100000000"
-                step="1000"
+                step="1"
                 required
                 className="form-input form-input-prefixed"
                 placeholder="750000"
@@ -232,7 +285,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
             )}
           </div>
 
-          <button type="submit" className="submit-button shift-end-btn" disabled={isEnding}>
+          <button type="button" onClick={handleEndShiftBtnClick} className="submit-button shift-end-btn" disabled={isEnding}>
             {isEnding ? (
               <span className="loading-wrapper">
                 <span className="spinner" />
@@ -249,6 +302,7 @@ export default function ShiftPanel({ initialShift }: ShiftPanelProps) {
           </button>
         </form>
       </div>
+      {ConfirmDialogElement}
     </div>
   );
 }

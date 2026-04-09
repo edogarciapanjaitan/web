@@ -6,6 +6,7 @@ import {
   type TransactionResult,
 } from "./pos-actions";
 import type { CartItem } from "./cart";
+import { useConfirm } from "@/components/confirm-dialog";
 
 // --- Types ---
 
@@ -52,6 +53,7 @@ export default function PaymentDialog({
   const change = amountPaidNum - totalPrice;
 
   const digitsOnly = debitCardNo.replace(/\D/g, "");
+  const { confirm, ConfirmDialogElement } = useConfirm();
 
   async function handleSubmit() {
     setError(null);
@@ -61,6 +63,15 @@ export default function PaymentDialog({
       setDebitError("Nomor kartu debit harus 16 digit");
       return;
     }
+
+    const confirmed = await confirm({
+      title: "Proses Transaksi?",
+      message: `Total pembayaran ${formatCurrency(totalPrice)} dengan metode ${method === "CASH" ? "Tunai" : "Debit"}. Lanjutkan proses transaksi?`,
+      confirmText: "Ya, Proses",
+      variant: "default",
+    });
+
+    if (!confirmed) return;
 
     setIsProcessing(true);
 
@@ -322,6 +333,7 @@ export default function PaymentDialog({
           )}
         </button>
       </div>
+      {ConfirmDialogElement}
     </div>
   );
 }
