@@ -19,6 +19,7 @@ export interface ProductResult {
   price: number;
   stock: number;
   category: string | null;
+  imageUrl?: string | null;
 }
 
 export interface TransactionResult {
@@ -50,6 +51,37 @@ interface ActionState {
 }
 
 // --- Server Actions ---
+
+/**
+ * Fetch catalog products with pagination and category filter.
+ */
+export async function fetchCatalogProducts(
+  page: number = 1,
+  category: string = ""
+): Promise<{ data: ProductResult[]; meta: any }> {
+  const token = await getAuthToken();
+  if (!token) return { data: [], meta: { pages: 0, total: 0, categories: [] } };
+
+  try {
+    const url = new URL("http://localhost:3001/api/products/catalog");
+    url.searchParams.append("page", page.toString());
+    if (category && category !== "Semua") {
+      url.searchParams.append("category", category);
+    }
+
+    const response = await fetch(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
+    });
+
+    if (!response.ok) return { data: [], meta: { pages: 0, total: 0, categories: [] } };
+
+    const result = await response.json();
+    return { data: result.data || [], meta: result.meta || {} };
+  } catch {
+    return { data: [], meta: { pages: 0, total: 0, categories: [] } };
+  }
+}
 
 /**
  * Search products by name or SKU.

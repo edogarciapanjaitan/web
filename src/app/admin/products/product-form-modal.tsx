@@ -208,6 +208,23 @@ export default function ProductFormModal({ product, onClose, onSuccess }: Produc
                 defaultValue={product?.category || ""} 
               />
             </div>
+            
+            <div className="form-group">
+              <label htmlFor="image" className="form-label">Gambar Produk (Opsional)</label>
+              {product?.imageUrl && (
+                <div style={{ marginBottom: '10px' }}>
+                   <img src={product.imageUrl} alt="Current" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }} />
+                </div>
+              )}
+              <input 
+                type="file" 
+                id="image" 
+                name="image" 
+                accept="image/*"
+                className="form-input" 
+                style={{ padding: "0.5rem 1rem" }}
+              />
+            </div>
           </div>
 
           <div style={{ padding: "1.5rem", borderTop: "1px solid var(--card-border)", display: "flex", justifyContent: "flex-end", gap: "1rem" }}>

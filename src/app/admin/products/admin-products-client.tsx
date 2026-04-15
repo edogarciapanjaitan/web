@@ -158,6 +158,7 @@ export default function AdminProductsClient({ initialData, initialMeta, initialS
             <table className="history-table">
               <thead>
                 <tr>
+                  <th style={{ width: '50px' }}>Gambar</th>
                   <th>SKU</th>
                   <th>Nama Produk</th>
                   <th>Kategori</th>
@@ -169,6 +170,13 @@ export default function AdminProductsClient({ initialData, initialMeta, initialS
               <tbody>
                 {initialData.map((item) => (
                   <tr key={item.id}>
+                    <td>
+                      {item.imageUrl ? (
+                        <img src={item.imageUrl} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />
+                      ) : (
+                        <div style={{ width: '40px', height: '40px', background: 'var(--card-border)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', color: 'var(--text-muted)' }}>No Img</div>
+                      )}
+                    </td>
                     <td style={{ fontFamily: "monospace", fontSize: "0.875rem", color: "var(--text-secondary)" }}>{item.sku}</td>
                     <td style={{ fontWeight: 500 }}>{item.name}</td>
                     <td>{item.category || "-"}</td>

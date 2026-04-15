@@ -12,6 +12,7 @@ export interface ProductData {
   price: number;
   stock: number;
   category: string | null;
+  imageUrl?: string | null;
 }
 
 interface ActionResponse {
@@ -21,13 +22,18 @@ interface ActionResponse {
 }
 
 // Ensure every request has auth token
-async function getAuthHeader() {
+async function getAuthHeader(isFormData = false) {
   const cookieStore = await cookies();
   const token = cookieStore.get("auth-token")?.value;
-  return {
-    "Content-Type": "application/json",
+  const headers: any = {
     Authorization: `Bearer ${token}`,
   };
+  
+  if (!isFormData) {
+    headers["Content-Type"] = "application/json";
+  }
+  
+  return headers;
 }
 
 export async function getAdminProducts(page: number = 1, search: string = "") {
@@ -64,27 +70,22 @@ export async function createProductAction(formData: FormData): Promise<ActionRes
   try {
     const name = (formData.get("name") as string)?.trim();
     const sku = (formData.get("sku") as string)?.trim();
-    const price = Number(formData.get("price"));
-    const stock = Number(formData.get("stock"));
+    const priceStr = formData.get("price") as string;
+    const stockStr = formData.get("stock") as string;
+
+    const price = Number(priceStr);
+    const stock = Number(stockStr);
 
     if (!name) return { success: false, message: "Nama produk harus diisi" };
     if (!sku) return { success: false, message: "SKU harus diisi" };
-    if (isNaN(price) || price <= 0) return { success: false, message: "Harga harus lebih dari 0" };
-    if (isNaN(stock) || stock <= 0) return { success: false, message: "Stok awal harus lebih dari 0" };
+    if (isNaN(price) || price < 0) return { success: false, message: "Harga tidak valid" };
+    if (isNaN(stock) || stock < 0) return { success: false, message: "Stok tidak valid" };
 
-    const data = {
-      name,
-      sku,
-      price,
-      stock,
-      category: formData.get("category") || null,
-    };
-
-    const headers = await getAuthHeader();
+    const headers = await getAuthHeader(true); // true means it's FormData
     const response = await fetch(API_URL, {
       method: "POST",
       headers,
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     const result = await response.json();
@@ -104,27 +105,22 @@ export async function updateProductAction(id: string, formData: FormData): Promi
   try {
     const name = (formData.get("name") as string)?.trim();
     const sku = (formData.get("sku") as string)?.trim();
-    const price = Number(formData.get("price"));
-    const stock = Number(formData.get("stock"));
+    const priceStr = formData.get("price") as string;
+    const stockStr = formData.get("stock") as string;
+
+    const price = Number(priceStr);
+    const stock = Number(stockStr);
 
     if (!name) return { success: false, message: "Nama produk harus diisi" };
     if (!sku) return { success: false, message: "SKU harus diisi" };
-    if (isNaN(price) || price <= 0) return { success: false, message: "Harga harus lebih dari 0" };
-    if (isNaN(stock) || stock <= 0) return { success: false, message: "Stok awal harus lebih dari 0" };
+    if (isNaN(price) || price < 0) return { success: false, message: "Harga tidak valid" };
+    if (isNaN(stock) || stock < 0) return { success: false, message: "Stok tidak valid" };
 
-    const data = {
-      name,
-      sku,
-      price,
-      stock,
-      category: formData.get("category") || null,
-    };
-
-    const headers = await getAuthHeader();
+    const headers = await getAuthHeader(true); // true means it's FormData
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
       headers,
-      body: JSON.stringify(data),
+      body: formData,
     });
 
     const result = await response.json();

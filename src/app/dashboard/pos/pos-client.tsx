@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import type { ProductResult, TransactionResult } from "./pos-actions";
 import ProductSearch from "./product-search";
+import ProductCatalog from "./product-catalog";
 import Cart, { type CartItem } from "./cart";
 import PaymentDialog from "./payment-dialog";
 import TransactionList from "./transaction-list";
@@ -114,9 +115,14 @@ export default function PosClient({
   return (
     <>
       <div className="pos-layout">
-        {/* Left Column: Search + Cart */}
+        {/* Left Column: Search + Catalog + Cart */}
         <div className="pos-left">
           <ProductSearch onAddToCart={addToCart} />
+          
+          <div className="pos-catalog-container">
+            <ProductCatalog onAddToCart={addToCart} />
+          </div>
+
           <Cart
             items={cartItems}
             onUpdateQuantity={updateQuantity}
