@@ -65,6 +65,7 @@ export async function fetchCatalogProducts(
   try {
     const url = new URL("http://localhost:3001/api/products/catalog");
     url.searchParams.append("page", page.toString());
+    url.searchParams.append("limit", "9"); // Max 3x3 per page
     if (category && category !== "Semua") {
       url.searchParams.append("category", category);
     }

@@ -81,7 +81,7 @@ export async function createProductAction(formData: FormData): Promise<ActionRes
     if (isNaN(price) || price < 0) return { success: false, message: "Harga tidak valid" };
     if (isNaN(stock) || stock < 0) return { success: false, message: "Stok tidak valid" };
 
-    const headers = await getAuthHeader(true); // true means it's FormData
+    const headers = await getAuthHeader(true); 
     const response = await fetch(API_URL, {
       method: "POST",
       headers,
