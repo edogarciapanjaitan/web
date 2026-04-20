@@ -8,13 +8,16 @@ export const metadata: Metadata = {
   description: "Melihat riwayat transaksi harian",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function HistoryPage({
   searchParams,
 }: {
   searchParams: Promise<{ date?: string }>;
 }) {
   const resolvedSearchParams = await searchParams;
-  const dateStr = resolvedSearchParams?.date || new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const dateStr = resolvedSearchParams?.date || `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
 
   // Fetch data cleanly on the server (SSR)
   const historyResponse = await fetchDailyHistory(dateStr);

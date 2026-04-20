@@ -43,7 +43,8 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
     router.push(`/dashboard/history?date=${newDate}`);
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
   const isFiltered = date !== today;
 
   const handleReset = () => {
