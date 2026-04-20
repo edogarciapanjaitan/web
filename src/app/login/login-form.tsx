@@ -90,7 +90,7 @@ export default function LoginForm() {
             autoComplete="current-password"
             required
             minLength={6}
-            maxLength={128}
+            maxLength={10}
             className="peer w-full py-3 pr-3.5 pl-11 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-[var(--foreground)] text-[0.9375rem] outline-none transition-all duration-200 placeholder:text-[var(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)] disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="Masukkan password"
             disabled={isPending}

@@ -20,7 +20,7 @@ const loginSchema = z.object({
     .string()
     .trim()
     .min(6, "Password minimal 6 karakter")
-    .max(128, "Password maksimal 128 karakter"),
+    .max(128, "Password maksimal 10 karakter"),
 });
 
 // --- Types ---
@@ -89,7 +89,7 @@ export async function loginAction(
       maxAge: 60 * 60 * 8,
       path: "/",
     });
-    
+
     // Explicitly set role cookie to help with layout auth later
     cookieStore.set("role", data.data.user.role, {
       httpOnly: false,
@@ -108,7 +108,7 @@ export async function loginAction(
   // 4. Redirect to appropriate dashboard based on role
   const cookieStore = await cookies();
   const role = cookieStore.get("role")?.value;
-  
+
   if (role === "ADMIN") {
     redirect("/admin");
   } else {
