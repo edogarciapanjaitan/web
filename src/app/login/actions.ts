@@ -9,7 +9,6 @@ import { z } from "zod";
 const loginSchema = z.object({
   username: z
     .string()
-    .trim()
     .min(3, "Username minimal 3 karakter")
     .max(30, "Username maksimal 30 karakter")
     .regex(
@@ -18,9 +17,9 @@ const loginSchema = z.object({
     ),
   password: z
     .string()
-    .trim()
     .min(6, "Password minimal 6 karakter")
-    .max(128, "Password maksimal 10 karakter"),
+    .max(128, "Password maksimal 10 karakter")
+    .refine((val) => val === val.trim(), "Password tidak boleh diawali atau diakhiri dengan spasi"),
 });
 
 // --- Types ---
