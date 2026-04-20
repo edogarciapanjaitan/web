@@ -39,7 +39,7 @@ export default async function AdminPage({
     <div style={{ animation: "fadeInUp 0.5s ease-out" }}>
       <div className="mb-8">
         <h2 className="text-2xl font-semibold m-0 mb-1.5">Selamat Datang di Portal Admin ⚙️</h2>
-        <p className="text-[var(--text-muted)] m-0 text-[0.9375rem]">Gunakan panel di sebelah kiri untuk mengelola aspek krusial sistem kasir.</p>
+        <p className="text-(--text-muted)] m-0 text-[0.9375rem]">Gunakan panel di sebelah kiri untuk mengelola aspek krusial sistem kasir.</p>
       </div>
 
       <DashboardChart 

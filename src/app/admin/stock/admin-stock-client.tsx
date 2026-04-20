@@ -110,14 +110,14 @@ export default function AdminStockClient({ initialData, initialMeta, initialSear
       )}
 
       {/* Toolbar */}
-      <div className="flex justify-between items-center bg-[rgba(30,41,59,0.4)] backdrop-blur-[12px] border border-[var(--card-border)] rounded-xl py-4 px-6">
+      <div className="flex justify-between items-center bg-[rgba(30,41,59,0.4)] backdrop-blur-md border border-(--card-border)] rounded-xl py-4 px-6">
         <div style={{ flex: 1, position: 'relative' }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }}>
             <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" fill="currentColor"/>
           </svg>
           <input
             type="text"
-            className="w-full py-3 pr-3.5 pl-4 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-[var(--foreground)] text-[0.9375rem] font-[inherit] outline-none transition-all duration-200 placeholder:text-[var(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)]"
+            className="w-full py-3 pr-3.5 pl-4 bg-(--input-bg)] border border-(--input-border)] rounded-xl text-(--foreground)] text-[0.9375rem] font-[inherit] outline-none transition-all duration-200 placeholder:text-(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)]"
             placeholder="Cari nama produk / SKU barang masuk..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -156,12 +156,12 @@ export default function AdminStockClient({ initialData, initialMeta, initialSear
       {/* Table */}
       <div className="mt-4">
         {initialData.length === 0 ? (
-           <div className="py-12 text-center text-[var(--text-muted)] text-sm">
+           <div className="py-12 text-center text-(--text-muted)] text-sm">
              <p>Tidak ada produk ditemukan.</p>
            </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border border-[var(--card-border)]">
-            <table className="w-full border-collapse text-sm [&_th]:py-3 [&_th]:px-4 [&_th]:text-left [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-[var(--text-muted)] [&_th]:font-semibold [&_th]:bg-[rgba(255,255,255,0.03)] [&_th]:border-b [&_th]:border-[var(--card-border)] [&_td]:py-3 [&_td]:px-4 [&_td]:border-b [&_td]:border-[rgba(255,255,255,0.04)] [&_tr:last-child_td]:border-b-0 [&_tr:hover_td]:bg-[rgba(255,255,255,0.02)]">
+          <div className="overflow-x-auto rounded-2xl border border-(--card-border)]">
+            <table className="w-full border-collapse text-sm [&_th]:py-3 [&_th]:px-4 [&_th]:text-left [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-(--text-muted)] [&_th]:font-semibold [&_th]:bg-[rgba(255,255,255,0.03)] [&_th]:border-b [&_th]:border-(--card-border)] [&_td]:py-3 [&_td]:px-4 [&_td]:border-b [&_td]:border-[rgba(255,255,255,0.04)] [&_tr:last-child_td]:border-b-0 [&_tr:hover_td]:bg-[rgba(255,255,255,0.02)]">
               <thead>
                 <tr>
                   <th>SKU</th>
@@ -193,7 +193,7 @@ export default function AdminStockClient({ initialData, initialMeta, initialSear
                               value={deltaValue}
                               onChange={(e) => setDeltaValue(e.target.value)}
                               placeholder="+10 atau -5"
-                              className="w-full py-3 pr-3.5 pl-4 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-[var(--foreground)] text-[0.9375rem] font-[inherit] outline-none transition-all duration-200 placeholder:text-[var(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)]"
+                              className="w-full py-3 pr-3.5 pl-4 bg-(--input-bg)] border border-(--input-border)] rounded-xl text-(--foreground)] text-[0.9375rem] font-[inherit] outline-none transition-all duration-200 placeholder:text-(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)]"
                               style={{ width: "130px", padding: "0.5rem 0.75rem", textAlign: "center" }}
                               autoFocus
                             />

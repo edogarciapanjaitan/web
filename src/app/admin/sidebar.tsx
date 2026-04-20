@@ -51,15 +51,15 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-[220px] bg-[rgba(255,255,255,0.02)] border-r border-[var(--card-border)] flex flex-col min-h-screen">
+    <aside className="w-55 bg-[rgba(255,255,255,0.02)] border-r border-(--card-border)] flex flex-col min-h-screen">
       {/* Brand */}
-      <div className="flex items-center gap-2.5 py-5 px-5 border-b border-[var(--card-border)]">
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--primary)] to-[#8b5cf6] flex items-center justify-center text-white flex-shrink-0">
+      <div className="flex items-center gap-2.5 py-5 px-5 border-b border-(--card-border)]">
+        <div className="w-8 h-8 rounded-lg bg-linear-to-br from-(--primary)] to-[#8b5cf6] flex items-center justify-center text-white shrink-0">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
-        <span className="font-semibold text-sm text-[var(--foreground)]">Admin Panel</span>
+        <span className="font-semibold text-sm text-(--foreground)]">Admin Panel</span>
       </div>
 
       {/* Navigation */}
@@ -70,9 +70,9 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium no-underline transition-all duration-150 ${isActive ? "bg-[rgba(99,102,241,0.12)] text-[var(--primary-hover)] border border-[rgba(99,102,241,0.2)]" : "text-[var(--text-secondary)] border border-transparent hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--foreground)]"}`}
+              className={`flex items-center gap-2.5 py-2.5 px-3 rounded-lg text-sm font-medium no-underline transition-all duration-150 ${isActive ? "bg-[rgba(99,102,241,0.12)] text-(--primary-hover)] border border-[rgba(99,102,241,0.2)]" : "text-(--text-secondary)] border border-transparent hover:bg-[rgba(255,255,255,0.04)] hover:text-(--foreground)]"}`}
             >
-              <span className="flex-shrink-0 opacity-80">{item.icon}</span>
+              <span className="shrink-0 opacity-80">{item.icon}</span>
               <span>{item.name}</span>
             </Link>
           );
@@ -80,8 +80,8 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer / Logout */}
-      <div className="py-4 px-3 border-t border-[var(--card-border)]">
-        <button onClick={handleLogout} className="flex items-center gap-2 w-full py-2.5 px-3 rounded-lg text-sm font-medium text-[var(--text-muted)] bg-transparent border border-transparent font-[inherit] cursor-pointer transition-all duration-150 hover:bg-[rgba(239,68,68,0.08)] hover:text-[#fca5a5] hover:border-[rgba(239,68,68,0.15)]">
+      <div className="py-4 px-3 border-t border-(--card-border)]">
+        <button onClick={handleLogout} className="flex items-center gap-2 w-full py-2.5 px-3 rounded-lg text-sm font-medium text-(--text-muted)] bg-transparent border border-transparent font-[inherit] cursor-pointer transition-all duration-150 hover:bg-[rgba(239,68,68,0.08)] hover:text-[#fca5a5] hover:border-[rgba(239,68,68,0.15)]">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
           </svg>

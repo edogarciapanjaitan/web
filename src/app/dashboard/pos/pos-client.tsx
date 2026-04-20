@@ -21,6 +21,8 @@ interface ShiftData {
 interface PosClientProps {
   shift: ShiftData;
   initialTransactions: TransactionResult[];
+  initialDailyCashSales?: number;
+  initialDailyDebitSales?: number;
 }
 
 // --- Helpers ---
@@ -46,13 +48,15 @@ function formatTime(dateStr: string): string {
 export default function PosClient({
   shift,
   initialTransactions,
+  initialDailyCashSales,
+  initialDailyDebitSales,
 }: PosClientProps) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showPayment, setShowPayment] = useState(false);
   const [transactions, setTransactions] =
     useState<TransactionResult[]>(initialTransactions);
-  const [salesCash, setSalesCash] = useState(shift.totalCashSales);
-  const [salesDebit, setSalesDebit] = useState(shift.totalDebitSales);
+  const [salesCash, setSalesCash] = useState(initialDailyCashSales ?? shift.totalCashSales);
+  const [salesDebit, setSalesDebit] = useState(initialDailyDebitSales ?? shift.totalDebitSales);
 
   // -- Cart operations --
 
@@ -134,8 +138,8 @@ export default function PosClient({
         {/* Right Column: Shift Info + Transactions */}
         <div className="flex flex-col gap-4">
           {/* Shift summary card */}
-          <div className="bg-[var(--card-bg)] border border-[rgba(34,197,94,0.15)] rounded-2xl p-6 backdrop-blur-[16px] shadow-[0_0_40px_-15px_rgba(34,197,94,0.1)]">
-            <div className="flex items-center gap-2.5 mb-2 text-[var(--foreground)]">
+          <div className="bg-(--card-bg)] border border-[rgba(34,197,94,0.15)] rounded-2xl p-6 backdrop-blur-lg shadow-[0_0_40px_-15px_rgba(34,197,94,0.1)]">
+            <div className="flex items-center gap-2.5 mb-2 text-(--foreground)]">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" fill="currentColor"/>
               </svg>
@@ -143,19 +147,19 @@ export default function PosClient({
             </div>
             <div className="grid grid-cols-2 gap-3 mt-3">
               <div className="flex flex-col gap-0.5">
-                <span className="text-[0.6875rem] text-[var(--text-muted)] uppercase tracking-[0.05em] font-medium">Mulai</span>
+                <span className="text-[0.6875rem] text-(--text-muted)] uppercase tracking-[0.05em] font-medium">Mulai</span>
                 <span className="text-[0.9375rem] font-semibold">{formatTime(shift.startTime)}</span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="text-[0.6875rem] text-[var(--text-muted)] uppercase tracking-[0.05em] font-medium">Uang Awal</span>
+                <span className="text-[0.6875rem] text-(--text-muted)] uppercase tracking-[0.05em] font-medium">Uang Awal</span>
                 <span className="text-[0.9375rem] font-semibold">{formatCurrency(shift.startingCash)}</span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="text-[0.6875rem] text-[var(--text-muted)] uppercase tracking-[0.05em] font-medium">Penjualan Tunai</span>
+                <span className="text-[0.6875rem] text-(--text-muted)] uppercase tracking-[0.05em] font-medium">Penjualan Tunai (Hari Ini)</span>
                 <span className="text-[0.9375rem] font-semibold text-[#86efac]">{formatCurrency(salesCash)}</span>
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="text-[0.6875rem] text-[var(--text-muted)] uppercase tracking-[0.05em] font-medium">Penjualan Debit</span>
+                <span className="text-[0.6875rem] text-(--text-muted)] uppercase tracking-[0.05em] font-medium">Penjualan Debit (Hari Ini)</span>
                 <span className="text-[0.9375rem] font-semibold text-[#a5b4fc]">{formatCurrency(salesDebit)}</span>
               </div>
             </div>

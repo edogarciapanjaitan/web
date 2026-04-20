@@ -60,15 +60,15 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
       {/* LEFT COLUMN: Date Picker & Transaction List */}
       <div className="flex flex-col gap-4">
         {/* Toolbar */}
-        <div className="flex justify-between items-center bg-[rgba(30,41,59,0.4)] backdrop-blur-[12px] border border-[var(--card-border)] rounded-xl py-4 px-6">
+        <div className="flex justify-between items-center bg-[rgba(30,41,59,0.4)] backdrop-blur-md border border-(--card-border)] rounded-xl py-4 px-6">
           <div className="flex items-center gap-4">
-            <label htmlFor="history-date" className="font-medium text-[var(--text-secondary)]">Pilih Tanggal:</label>
+            <label htmlFor="history-date" className="font-medium text-(--text-secondary)]">Pilih Tanggal:</label>
             <input
               type="date"
               id="history-date"
               value={date}
               onChange={handleDateChange}
-              className="bg-[rgba(255,255,255,0.06)] border border-[var(--card-border)] text-[var(--foreground)] py-2 px-4 rounded-lg font-[inherit] [color-scheme:dark]"
+              className="bg-[rgba(255,255,255,0.06)] border border-(--card-border)] text-(--foreground)] py-2 px-4 rounded-lg font-[inherit] scheme:dark"
             />
             {isFiltered && (
               <button
@@ -100,40 +100,40 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
 
           <div className="flex gap-6">
             <div className="flex flex-col items-end">
-              <span className="text-xs uppercase tracking-[0.05em] text-[var(--text-secondary)]">Total Transaksi</span>
+              <span className="text-xs uppercase tracking-[0.05em] text-(--text-secondary)]">Total Transaksi</span>
               <span className="text-[1.25rem] font-bold">{initialData.length}</span>
             </div>
             <div className="flex flex-col items-end">
-              <span className="text-xs uppercase tracking-[0.05em] text-[var(--text-secondary)]">Total Pendapatan</span>
-              <span className="text-[1.25rem] font-bold text-[var(--success)]">{formatCurrency(totalSales)}</span>
+              <span className="text-xs uppercase tracking-[0.05em] text-(--text-secondary)]">Total Pendapatan</span>
+              <span className="text-[1.25rem] font-bold text-(--success)]">{formatCurrency(totalSales)}</span>
             </div>
           </div>
         </div>
 
         {/* Error State */}
         {error && (
-          <div className="flex items-center gap-2 py-3 px-4 bg-[var(--error-bg)] border border-[var(--error-border)] rounded-xl text-[#fca5a5] text-[0.8125rem] animate-[fadeIn_0.3s_ease]">
+          <div className="flex items-center gap-2 py-3 px-4 bg-(--error-bg)] border border-(--error-border)] rounded-xl text-[#fca5a5] text-[0.8125rem] animate-[fadeIn_0.3s_ease]">
             <span>{error}</span>
           </div>
         )}
 
         {/* Transaction List */}
         {!error && (
-          <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl backdrop-blur-[16px] mt-2">
-            <div className="flex items-center gap-2 py-4 px-5 border-b border-[var(--card-border)] text-[var(--foreground)]">
+          <div className="bg-(--card-bg)] border border-(--card-border)] rounded-2xl backdrop-blur-lg mt-2">
+            <div className="flex items-center gap-2 py-4 px-5 border-b border-(--card-border)] text-(--foreground)]">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z" fill="currentColor" />
               </svg>
               <h3 className="text-base font-semibold m-0 flex-1">Daftar Transaksi</h3>
-              <span className="text-xs text-[var(--text-muted)] bg-[rgba(255,255,255,0.06)] py-0.5 px-2 rounded-full font-medium">{initialData.length}</span>
+              <span className="text-xs text-(--text-muted)] bg-[rgba(255,255,255,0.06)] py-0.5 px-2 rounded-full font-medium">{initialData.length}</span>
             </div>
 
             {initialData.length === 0 ? (
-              <div className="py-8 px-5 text-center text-[var(--text-muted)] text-sm">
+              <div className="py-8 px-5 text-center text-(--text-muted)] text-sm">
                 <p className="m-0">Belum ada transaksi pada tanggal ini.</p>
               </div>
             ) : (
-              <div className="max-h-[600px] overflow-y-auto">
+              <div className="max-h-150 overflow-y-auto">
                 {initialData.map((tx) => (
                   <div
                     key={tx.id}
@@ -147,7 +147,7 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
                   >
                     <div className="flex justify-between items-center">
                       <span className="text-[0.8125rem] font-medium font-mono">{tx.invoiceNumber}</span>
-                      <span className="text-xs text-[var(--text-muted)]">{formatTime(tx.createdAt)}</span>
+                      <span className="text-xs text-(--text-muted)]">{formatTime(tx.createdAt)}</span>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className={`text-[0.6875rem] font-medium py-0.5 px-2 rounded uppercase tracking-[0.03em] ${tx.paymentMethod === "CASH" ? "bg-[rgba(34,197,94,0.1)] text-[#86efac]" : "bg-[rgba(99,102,241,0.1)] text-[#a5b4fc]"}`}>
@@ -167,8 +167,8 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
 
       {/* RIGHT COLUMN: Transaction Details */}
       <div className="flex flex-col gap-4">
-        <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl backdrop-blur-[16px]">
-          <div className="flex items-center gap-2 py-4 px-5 border-b border-[var(--card-border)] text-[var(--foreground)]">
+        <div className="bg-(--card-bg)] border border-(--card-border)] rounded-2xl backdrop-blur-lg">
+          <div className="flex items-center gap-2 py-4 px-5 border-b border-(--card-border)] text-(--foreground)]">
             <h3 className="text-base font-semibold m-0 flex-1">Detail Transaksi</h3>
             {selectedTx && (
               <span className="font-mono text-sm text-gray-400">{selectedTx.invoiceNumber}</span>
@@ -177,7 +177,7 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
 
           <div>
             {!selectedTx ? (
-              <div className="flex flex-col items-center gap-1.5 py-16 px-8 text-[var(--text-muted)]">
+              <div className="flex flex-col items-center gap-1.5 py-16 px-8 text-(--text-muted)]">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" opacity="0.3" xmlns="http://www.w3.org/2000/svg">
                   <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" fill="currentColor" />
                 </svg>
@@ -207,7 +207,7 @@ export default function HistoryClient({ initialDate, initialData, error }: Histo
                   )}
                 </div>
 
-                <div className="max-h-[350px] overflow-y-auto border-t border-b border-[var(--card-border)]">
+                <div className="max-h-87.5 overflow-y-auto border-t border-b border-(--card-border)]">
                   {selectedTx.items.map((item) => (
                     <div key={item.id} className="flex flex-col gap-2 py-3.5 px-5 border-b border-[rgba(255,255,255,0.04)] last:border-b-0">
                       <div className="flex justify-between items-baseline">

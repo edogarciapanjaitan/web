@@ -273,7 +273,7 @@ export default function ShiftReportTable({ reports, initialSearch, initialFilter
             </svg>
             <input
               type="text"
-              className="w-full py-3 pr-3.5 pl-4 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-[var(--foreground)] text-[0.9375rem] font-[inherit] outline-none transition-all duration-200 placeholder:text-[var(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)]"
+              className="w-full py-3 pr-3.5 pl-4 bg-(--input-bg)] border border-(--input-border)] rounded-xl text-(--foreground)] text-[0.9375rem] font-[inherit] outline-none transition-all duration-200 placeholder:text-(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)]"
               placeholder="Cari kasir atau tanggal..."
               value={searchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
@@ -311,7 +311,7 @@ export default function ShiftReportTable({ reports, initialSearch, initialFilter
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-2xl border border-[var(--card-border)]">
+      <div className="overflow-x-auto rounded-2xl border border-(--card-border)]">
         {filteredReports.length === 0 ? (
           <div style={{ textAlign: "center", padding: "3rem 1rem", color: "var(--text-muted)", fontSize: "0.9375rem" }}>
             {filter === "discrepancy"
@@ -319,7 +319,7 @@ export default function ShiftReportTable({ reports, initialSearch, initialFilter
               : "Tidak ada data laporan shift yang ditemukan."}
           </div>
         ) : (
-          <table className="w-full border-collapse text-sm [&_th]:py-3 [&_th]:px-4 [&_th]:text-left [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-[var(--text-muted)] [&_th]:font-semibold [&_th]:bg-[rgba(255,255,255,0.03)] [&_th]:border-b [&_th]:border-[var(--card-border)] [&_td]:py-3 [&_td]:px-4 [&_td]:border-b [&_td]:border-[rgba(255,255,255,0.04)] [&_tr:last-child_td]:border-b-0 [&_tr:hover_td]:bg-[rgba(255,255,255,0.02)]">
+          <table className="w-full border-collapse text-sm [&_th]:py-3 [&_th]:px-4 [&_th]:text-left [&_th]:text-xs [&_th]:uppercase [&_th]:tracking-wider [&_th]:text-(--text-muted)] [&_th]:font-semibold [&_th]:bg-[rgba(255,255,255,0.03)] [&_th]:border-b [&_th]:border-(--card-border)] [&_td]:py-3 [&_td]:px-4 [&_td]:border-b [&_td]:border-[rgba(255,255,255,0.04)] [&_tr:last-child_td]:border-b-0 [&_tr:hover_td]:bg-[rgba(255,255,255,0.02)]">
             <thead>
               <tr>
                 <th>Waktu Shift</th>

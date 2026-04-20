@@ -39,17 +39,17 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-[var(--background)]">
+    <div className="flex min-h-screen bg-(--background)]">
       {/* Dynamic Sidebar Client Component */}
       <Sidebar />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         {/* Top Header */}
-        <header className="flex items-center justify-between px-8 py-5 border-b border-[var(--card-border)] bg-[rgba(255,255,255,0.02)] backdrop-blur-[8px]">
+        <header className="flex items-center justify-between px-8 py-5 border-b border-(--card-border)] bg-[rgba(255,255,255,0.02)] backdrop-blur-sm">
           <div>
             <h2 className="m-0 text-[1.25rem] font-semibold">Portal Administrasi</h2>
-            <p className="m-0 text-sm text-[var(--text-muted)]">
+            <p className="m-0 text-sm text-(--text-muted)]">
               {new Date().toLocaleDateString("id-ID", {
                 weekday: "long",
                 year: "numeric",
@@ -63,7 +63,7 @@ export default async function AdminLayout({
             <div className="flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm font-medium m-0">{user.name}</p>
-                <p className="text-xs text-[var(--text-muted)] m-0 uppercase tracking-[0.05em]">{user.role}</p>
+                <p className="text-xs text-(--text-muted)] m-0 uppercase tracking-[0.05em]">{user.role}</p>
               </div>
             </div>
           )}

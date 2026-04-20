@@ -16,14 +16,14 @@ export default function LoginPage() {
           background: "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(99, 102, 241, 0.15), transparent), radial-gradient(ellipse 60% 40% at 80% 100%, rgba(139, 92, 246, 0.08), transparent)"
         }}
       />
-      <div className="fixed rounded-full blur-[100px] pointer-events-none z-0 animate-[float_8s_ease-in-out_infinite] w-[400px] h-[400px] bg-[rgba(99,102,241,0.08)] -top-[10%] -right-[5%]" />
-      <div className="fixed rounded-full blur-[100px] pointer-events-none z-0 animate-[float_8s_ease-in-out_infinite] w-[300px] h-[300px] bg-[rgba(139,92,246,0.06)] -bottom-[5%] -left-[5%]" style={{ animationDelay: "-4s" }} />
+      <div className="fixed rounded-full blur-[100px] pointer-events-none z-0 animate-[float_8s_ease-in-out_infinite] w-100 h-100 bg-[rgba(99,102,241,0.08)] -top-[10%] -right-[5%]" />
+      <div className="fixed rounded-full blur-[100px] pointer-events-none z-0 animate-[float_8s_ease-in-out_infinite] w-75 h-75 bg-[rgba(139,92,246,0.06)] -bottom-[5%] -left-[5%]" style={{ animationDelay: "-4s" }} />
 
       {/* Login Card */}
-      <main className="relative z-10 w-full max-w-[420px] bg-[var(--card-bg)] border border-[var(--card-border)] rounded-[1.25rem] p-10 backdrop-blur-[24px] shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_80px_-20px_var(--primary-glow)] animate-[fadeInUp_0.6s_ease-out]">
+      <main className="relative z-10 w-full max-w-105 bg-(--card-bg)] border border-(--card-border)] rounded-[1.25rem] p-10 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.03),0_25px_50px_-12px_rgba(0,0,0,0.5),0_0_80px_-20px_var(--primary-glow)] animate-[fadeInUp_0.6s_ease-out]">
         {/* Logo & Title */}
         <div className="text-center mb-6">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[#8b5cf6] flex items-center justify-center mx-auto mb-4 text-white shadow-[0_8px_24px_var(--primary-glow)]">
+          <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-(--primary)] to-[#8b5cf6] flex items-center justify-center mx-auto mb-4 text-white shadow-[0_8px_24px_var(--primary-glow)]">
             <svg
               width="28"
               height="28"
@@ -37,8 +37,8 @@ export default function LoginPage() {
               />
             </svg>
           </div>
-          <h1 className="text-[1.625rem] font-bold tracking-tight m-0 bg-gradient-to-br from-white to-[rgba(255,255,255,0.7)] text-transparent bg-clip-text">Cashier App</h1>
-          <p className="text-sm text-[var(--text-muted)] mt-[0.375rem]">
+          <h1 className="text-[1.625rem] font-bold tracking-tight m-0 bg-linear-to-br from-white to-[rgba(255,255,255,0.7)] text-transparent bg-clip-text">Cashier App</h1>
+          <p className="text-sm text-(--text-muted)] mt-1.75">
             Masuk untuk memulai shift dan transaksi
           </p>
         </div>
@@ -56,7 +56,7 @@ export default function LoginPage() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 mt-8 text-xs text-[var(--text-muted)]">
+      <footer className="relative z-10 mt-8 text-xs text-(--text-muted)]">
         <p>&copy; 2026 Cashier App. All rights reserved.</p>
       </footer>
     </div>

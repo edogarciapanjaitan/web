@@ -163,6 +163,7 @@ export async function createTransactionAction(payload: {
     revalidatePath("/dashboard/pos");
     revalidatePath("/dashboard");
     revalidatePath("/dashboard/history");
+    revalidatePath("/admin");
     return {
       success: true,
       message: "Transaksi berhasil!",
