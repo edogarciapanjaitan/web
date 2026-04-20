@@ -45,13 +45,13 @@ export default function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
   }
 
   return (
-    <div className="product-catalog">
+    <div className="flex flex-col gap-4 h-full">
       {/* Category Filter */}
-      <div className="catalog-categories">
+      <div className="flex gap-2 overflow-x-auto pb-2 hide-scrollbar">
         {categories.map((cat) => (
           <button
             key={cat}
-            className={`category-pill ${activeCategory === cat ? "active" : ""}`}
+            className={`py-2 px-5 rounded-full text-sm font-medium cursor-pointer whitespace-nowrap transition-all duration-200 shadow-[0_1px_2px_rgba(0,0,0,0.05)] ${activeCategory === cat ? "bg-[#111827] text-white border-[#111827]" : "bg-white border border-[rgba(0,0,0,0.05)] text-[#111111] hover:bg-[#f9fafb]"}`}
             onClick={() => handleCategoryClick(cat)}
           >
             {cat}
@@ -60,31 +60,31 @@ export default function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
       </div>
 
       {/* Grid */}
-      <div className="catalog-grid">
+      <div className="grid grid-cols-3 gap-3.5 overflow-y-auto pr-2 max-[1200px]:grid-cols-2 max-[800px]:grid-cols-1">
         {isLoading ? (
-          <div className="catalog-loading">Memuat produk...</div>
+          <div className="col-span-full text-center py-12 text-[var(--text-muted)] text-[0.9375rem]">Memuat produk...</div>
         ) : products.length === 0 ? (
-          <div className="catalog-empty">Tidak ada produk ditemukan</div>
+          <div className="col-span-full text-center py-12 text-[var(--text-muted)] text-[0.9375rem]">Tidak ada produk ditemukan</div>
         ) : (
           products.map((product) => (
-            <div key={product.id} className="catalog-card">
-              <div className="catalog-card-image">
+            <div key={product.id} className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl p-2.5 flex flex-col gap-2 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_25px_rgba(0,0,0,0.2)]">
+              <div className="h-[110px] w-full bg-[rgba(255,255,255,0.03)] rounded-lg overflow-hidden relative flex items-center justify-center">
                 {product.imageUrl ? (
-                  <img src={product.imageUrl} alt={product.name} />
+                  <img src={product.imageUrl} alt={product.name} className="w-full h-full object-contain p-1 transition-transform duration-300 group-hover:scale-105" />
                 ) : (
-                  <div className="catalog-no-image">No Image</div>
+                  <div className="absolute inset-0 flex items-center justify-center text-[#9ca3af] text-sm font-medium">No Image</div>
                 )}
               </div>
-              <div className="catalog-card-info">
-                <div className="catalog-card-title">{product.name}</div>
-                <div className="catalog-card-bottom">
-                  <div className="catalog-card-price">{formatCurrency(product.price)}</div>
+              <div className="flex flex-col gap-2 px-1">
+                <div className="text-[0.9375rem] font-medium text-[var(--foreground)] leading-tight whitespace-nowrap overflow-hidden text-ellipsis">{product.name}</div>
+                <div className="flex items-center justify-between">
+                  <div className="text-[1.125rem] font-bold text-[var(--foreground)]">{formatCurrency(product.price)}</div>
                   <button 
-                    className="catalog-card-add" 
+                    className="bg-[var(--foreground)] text-[var(--background)] border-none rounded-full w-[30px] h-[30px] flex items-center justify-center cursor-pointer transition-all duration-200 shadow-[0_2px_8px_rgba(0,0,0,0.1)] hover:not-disabled:scale-110 hover:not-disabled:bg-[var(--primary)] hover:not-disabled:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-[var(--text-muted)]"
                     onClick={() => onAddToCart(product)}
                     disabled={product.stock <= 0}
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="12" y1="5" x2="12" y2="19"></line>
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg>
@@ -98,10 +98,11 @@ export default function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="catalog-pagination">
+        <div className="flex items-center justify-center gap-4 pt-4 mt-auto">
           <button 
             disabled={page <= 1 || isLoading} 
             onClick={() => setPage(page - 1)}
+            className="bg-[var(--card-bg)] border border-[var(--card-border)] text-[var(--foreground)] w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer font-bold transition-all duration-200 hover:not-disabled:bg-[rgba(255,255,255,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             &lt;
           </button>
@@ -109,6 +110,7 @@ export default function ProductCatalog({ onAddToCart }: ProductCatalogProps) {
           <button 
             disabled={page >= totalPages || isLoading} 
             onClick={() => setPage(page + 1)}
+            className="bg-[var(--card-bg)] border border-[var(--card-border)] text-[var(--foreground)] w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer font-bold transition-all duration-200 hover:not-disabled:bg-[rgba(255,255,255,0.1)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             &gt;
           </button>

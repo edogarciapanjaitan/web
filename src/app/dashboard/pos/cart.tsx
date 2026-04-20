@@ -42,48 +42,48 @@ export default function Cart({
 
   if (items.length === 0) {
     return (
-      <div className="cart cart-empty-state">
-        <div className="cart-header">
+      <div className="bg-[var(--card-bg)] border border-dashed border-[rgba(255,255,255,0.06)] rounded-2xl backdrop-blur-[16px] flex flex-col">
+        <div className="flex items-center gap-2 py-4 px-5 border-b border-[var(--card-border)] text-[var(--foreground)]">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/>
           </svg>
-          <h3>Keranjang</h3>
+          <h3 className="text-base font-semibold m-0 flex-1">Keranjang</h3>
         </div>
-        <div className="cart-empty-icon">
+        <div className="flex flex-col items-center gap-1.5 py-8 px-5 text-[var(--text-muted)]">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" opacity="0.3">
             <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/>
           </svg>
-          <p>Keranjang masih kosong</p>
-          <p className="cart-empty-hint">Cari dan tambahkan produk di atas</p>
+          <p className="m-0 text-sm">Keranjang masih kosong</p>
+          <p className="text-xs text-[var(--text-muted)] opacity-70 m-0">Cari dan tambahkan produk di atas</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="cart">
-      <div className="cart-header">
+    <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-2xl backdrop-blur-[16px] flex flex-col">
+      <div className="flex items-center gap-2 py-4 px-5 border-b border-[var(--card-border)] text-[var(--foreground)]">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" fill="currentColor"/>
         </svg>
-        <h3>Keranjang</h3>
-        <span className="cart-count">{items.length} item</span>
+        <h3 className="text-base font-semibold m-0 flex-1">Keranjang</h3>
+        <span className="text-xs text-[var(--text-muted)] bg-[rgba(255,255,255,0.06)] py-0.5 px-2 rounded-full">{items.length} item</span>
       </div>
 
-      <div className="cart-items">
+      <div className="max-h-[350px] overflow-y-auto">
         {items.map((item) => (
-          <div key={item.product.id} className="cart-item">
-            <div className="cart-item-info">
-              <span className="cart-item-name">{item.product.name}</span>
-              <span className="cart-item-price">
+          <div key={item.product.id} className="flex flex-col gap-2 py-3.5 px-5 border-b border-[rgba(255,255,255,0.04)] last:border-b-0">
+            <div className="flex justify-between items-baseline">
+              <span className="text-sm font-medium">{item.product.name}</span>
+              <span className="text-xs text-[var(--text-muted)]">
                 {formatCurrency(item.product.price)}
               </span>
             </div>
-            <div className="cart-item-actions">
-              <div className="qty-controls">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center bg-[rgba(255,255,255,0.04)] rounded-lg border border-[rgba(255,255,255,0.08)]">
                 <button
                   type="button"
-                  className="qty-btn"
+                  className="w-8 h-8 flex items-center justify-center bg-transparent border-none text-[var(--foreground)] text-base cursor-pointer transition-all duration-150 rounded-lg font-[inherit] hover:not-disabled:bg-[rgba(255,255,255,0.08)] disabled:opacity-30 disabled:cursor-not-allowed"
                   onClick={() =>
                     onUpdateQuantity(item.product.id, item.quantity - 1)
                   }
@@ -91,10 +91,10 @@ export default function Cart({
                 >
                   −
                 </button>
-                <span className="qty-value">{item.quantity}</span>
+                <span className="min-w-8 text-center text-sm font-semibold">{item.quantity}</span>
                 <button
                   type="button"
-                  className="qty-btn"
+                  className="w-8 h-8 flex items-center justify-center bg-transparent border-none text-[var(--foreground)] text-base cursor-pointer transition-all duration-150 rounded-lg font-[inherit] hover:not-disabled:bg-[rgba(255,255,255,0.08)] disabled:opacity-30 disabled:cursor-not-allowed"
                   onClick={() =>
                     onUpdateQuantity(item.product.id, item.quantity + 1)
                   }
@@ -103,12 +103,12 @@ export default function Cart({
                   +
                 </button>
               </div>
-              <span className="cart-item-subtotal">
+              <span className="flex-1 text-right text-sm font-semibold text-[var(--foreground)]">
                 {formatCurrency(item.product.price * item.quantity)}
               </span>
               <button
                 type="button"
-                className="cart-remove-btn"
+                className="flex items-center justify-center w-7 h-7 bg-transparent border-none rounded-md text-[var(--text-muted)] cursor-pointer transition-all duration-150 hover:bg-[var(--error-bg)] hover:text-[var(--error)]"
                 onClick={() => onRemoveItem(item.product.id)}
                 title="Hapus item"
               >
@@ -121,14 +121,14 @@ export default function Cart({
         ))}
       </div>
 
-      <div className="cart-footer">
-        <div className="cart-total">
+      <div className="py-4 px-5 border-t border-[var(--card-border)] flex flex-col gap-3">
+        <div className="flex justify-between items-center text-[0.9375rem] font-medium">
           <span>Total</span>
-          <span className="cart-total-price">{formatCurrency(totalPrice)}</span>
+          <span className="text-[1.25rem] font-bold bg-gradient-to-br from-white to-[rgba(255,255,255,0.8)] text-transparent bg-clip-text">{formatCurrency(totalPrice)}</span>
         </div>
         <button
           type="button"
-          className="submit-button checkout-btn"
+          className="w-full py-[0.8125rem] bg-gradient-to-br from-[var(--primary)] to-[#7c3aed] border-none rounded-xl text-white text-[0.9375rem] font-semibold font-[inherit] cursor-pointer transition-all duration-200 relative overflow-hidden flex items-center justify-center gap-2 hover:not-disabled:-translate-y-px hover:not-disabled:shadow-[0_8px_24px_var(--primary-glow)] disabled:opacity-70 disabled:cursor-not-allowed"
           onClick={onCheckout}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

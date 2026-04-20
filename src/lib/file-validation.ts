@@ -175,9 +175,6 @@ export function validateFile(
   return null; // Valid
 }
 
-// ============================
-// CONSTANTS EXPORT (untuk referensi)
-// ============================
 
 export {
   ALLOWED_IMAGE_EXTENSIONS,

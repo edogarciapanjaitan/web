@@ -7,10 +7,10 @@ export default function LoginForm() {
   const [state, formAction, isPending] = useActionState(loginAction, null);
 
   return (
-    <form action={formAction} className="login-form">
+    <form action={formAction} className="flex flex-col gap-5">
       {/* Error Banner */}
       {state && !state.success && (
-        <div className="error-banner" role="alert">
+        <div className="flex items-center gap-2 py-3 px-4 bg-[var(--error-bg)] border border-[var(--error-border)] rounded-xl text-[#fca5a5] text-[0.8125rem] animate-[fadeIn_0.3s_ease]" role="alert">
           <svg
             width="16"
             height="16"
@@ -28,13 +28,13 @@ export default function LoginForm() {
       )}
 
       {/* Username Field */}
-      <div className="form-group">
-        <label htmlFor="username" className="form-label">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="username" className="text-[0.8125rem] font-medium text-[var(--text-secondary)] tracking-[0.01em]">
           Username
         </label>
-        <div className="input-wrapper">
+        <div className="relative flex items-center group/wrapper">
           <svg
-            className="input-icon"
+            className="absolute left-3.5 text-[var(--text-muted)] pointer-events-none transition-colors duration-200 group-focus-within/wrapper:text-[var(--primary-hover)] peer-focus:text-[var(--primary-hover)]"
             width="18"
             height="18"
             viewBox="0 0 24 24"
@@ -54,24 +54,24 @@ export default function LoginForm() {
             required
             minLength={3}
             maxLength={30}
-            className="form-input"
+            className="peer w-full py-3 pr-3.5 pl-11 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-[var(--foreground)] text-[0.9375rem] outline-none transition-all duration-200 placeholder:text-[var(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)] disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="Masukkan username"
             disabled={isPending}
           />
         </div>
         {state?.errors?.username && (
-          <p className="field-error">{state.errors.username[0]}</p>
+          <p className="text-xs text-[var(--error)] m-0 animate-[fadeIn_0.2s_ease]">{state.errors.username[0]}</p>
         )}
       </div>
 
       {/* Password Field */}
-      <div className="form-group">
-        <label htmlFor="password" className="form-label">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="password" className="text-[0.8125rem] font-medium text-[var(--text-secondary)] tracking-[0.01em]">
           Password
         </label>
-        <div className="input-wrapper">
+        <div className="relative flex items-center group/wrapper">
           <svg
-            className="input-icon"
+            className="absolute left-3.5 text-[var(--text-muted)] pointer-events-none transition-colors duration-200 group-focus-within/wrapper:text-[var(--primary-hover)] peer-focus:text-[var(--primary-hover)]"
             width="18"
             height="18"
             viewBox="0 0 24 24"
@@ -91,25 +91,25 @@ export default function LoginForm() {
             required
             minLength={6}
             maxLength={128}
-            className="form-input"
+            className="peer w-full py-3 pr-3.5 pl-11 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-[var(--foreground)] text-[0.9375rem] outline-none transition-all duration-200 placeholder:text-[var(--text-muted)] hover:border-[rgba(255,255,255,0.2)] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_var(--primary-glow)] focus:bg-[rgba(255,255,255,0.08)] disabled:opacity-50 disabled:cursor-not-allowed"
             placeholder="Masukkan password"
             disabled={isPending}
           />
         </div>
         {state?.errors?.password && (
-          <p className="field-error">{state.errors.password[0]}</p>
+          <p className="text-xs text-[var(--error)] m-0 animate-[fadeIn_0.2s_ease]">{state.errors.password[0]}</p>
         )}
       </div>
 
       {/* Submit Button */}
       <button
         type="submit"
-        className="submit-button"
+        className="w-full py-[0.8125rem] bg-gradient-to-br from-[var(--primary)] to-[#7c3aed] border-none rounded-xl text-white text-[0.9375rem] font-semibold cursor-pointer transition-all duration-200 relative overflow-hidden mt-1 group before:absolute before:inset-0 before:bg-gradient-to-br before:from-[rgba(255,255,255,0.1)] before:to-transparent before:opacity-0 before:transition-opacity before:duration-200 hover:before:opacity-100 hover:not-disabled:-translate-y-[1px] hover:not-disabled:shadow-[0_8px_24px_var(--primary-glow)] active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
         disabled={isPending}
       >
         {isPending ? (
-          <span className="loading-wrapper">
-            <span className="spinner" />
+          <span className="flex items-center justify-center gap-2">
+            <span className="w-[18px] h-[18px] border-2 border-[rgba(255,255,255,0.3)] border-t-white rounded-full animate-[spin_0.6s_linear_infinite]" />
             <span>Memproses...</span>
           </span>
         ) : (

@@ -39,17 +39,17 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="admin-layout">
+    <div className="flex min-h-screen bg-[var(--background)]">
       {/* Dynamic Sidebar Client Component */}
       <Sidebar />
 
       {/* Main Content Area */}
-      <div className="admin-main">
+      <div className="flex-1 flex flex-col min-h-screen overflow-x-hidden">
         {/* Top Header */}
-        <header className="admin-main-header">
+        <header className="flex items-center justify-between px-8 py-5 border-b border-[var(--card-border)] bg-[rgba(255,255,255,0.02)] backdrop-blur-[8px]">
           <div>
-            <h2 style={{ margin: 0, fontSize: "1.25rem", fontWeight: 600 }}>Portal Administrasi</h2>
-            <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--text-muted)" }}>
+            <h2 className="m-0 text-[1.25rem] font-semibold">Portal Administrasi</h2>
+            <p className="m-0 text-sm text-[var(--text-muted)]">
               {new Date().toLocaleDateString("id-ID", {
                 weekday: "long",
                 year: "numeric",
@@ -60,17 +60,17 @@ export default async function AdminLayout({
           </div>
           
           {user && (
-            <div className="dashboard-user">
-              <div className="user-info">
-                <p className="user-name">{user.name}</p>
-                <p className="user-role">{user.role}</p>
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-sm font-medium m-0">{user.name}</p>
+                <p className="text-xs text-[var(--text-muted)] m-0 uppercase tracking-[0.05em]">{user.role}</p>
               </div>
             </div>
           )}
         </header>
 
         {/* Dynamic Page Content */}
-        <main className="admin-content-wrapper">
+        <main className="flex-1 p-8 overflow-y-auto">
           {children}
         </main>
       </div>
